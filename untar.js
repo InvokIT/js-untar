@@ -1,4 +1,4 @@
-// var workerScriptUri is compiled in
+var workerScriptUri; // Included at compile time
 
 /**
 source	= ArrayBuffer or a url string. If an ArrayBuffer, it will be transfered to the web worker and will thus not be available in the window after.
@@ -10,6 +10,7 @@ options	= {
 }
 */
 function untar(source, options) {
+	"use strict";
 	if (typeof Promise !== "function") {
 		throw new Error("Promise implementation not available in this environment.");
 	}
@@ -20,8 +21,6 @@ function untar(source, options) {
 
 	options = options || {};
 
-	function makeTarFile
-
 	return new Promise(function(resolve, reject) {
 		var noop = function() { };
 		var onComplete = options.onComplete || noop;
@@ -31,6 +30,7 @@ function untar(source, options) {
 
 		var worker = new Worker(workerScriptUri);
 		var files = [];
+		var msgData;
 
 		worker.onmessage = function(message) {
 			switch (message.type) {
@@ -38,23 +38,23 @@ function untar(source, options) {
 					onLoading(message.data);
 					break;
 				case "extract":
-					var file = new TarFile(message.data);
-					files.push(file);
-					onExtract(file);
+					msgData = new TarFile(message.data);
+					files.push(msgData);
+					onExtract(msgData);
 					break;
 				case "complete":
 					onComplete(files);
 					resolve(files);
 					break;
 				case "error":
-					var error = message.data;
-					onError(error);
-					reject(error);
+					msgData = message.data;
+					onError(msgData);
+					reject(msgData);
 					break;
 				default:
-					var error = new Error("Unknown message from worker.");
-					onError(error);
-					reject(error);
+					msgData = new Error("Unknown message from worker.");
+					onError(msgData);
+					reject(msgData);
 					break;
 			}
 		};
@@ -65,9 +65,10 @@ function untar(source, options) {
 }
 
 function TarFile(orig) {
+	"use strict";
 	this._blobUrl = null;
 
-	for (p in orig) {
+	for (var p in orig) {
 		switch (p) {
 			case "buffer":
 				this.blob = new Blob([orig.buffer]);
@@ -81,6 +82,7 @@ function TarFile(orig) {
 
 TarFile.prototype = {
 	getObjectUrl: function() {
+		"use strict";
 		if (!this._blobUrl) {
 			this._blobUrl = URL.createObjectURL(this.blob);
 		}

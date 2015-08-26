@@ -6,7 +6,7 @@ var gulp = require("gulp"),
 	addSrc = require("gulp-add-src"),
 	concat = require("gulp-concat"),
 	jshint = require("gulp-jshint"),
-	jasmine = require("gulp-jasmine");
+	KarmaServer = require('karma').Server;
 
 gulp.task("default", function() {
 	return gulp.src("untar-worker.js")
@@ -16,7 +16,7 @@ gulp.task("default", function() {
 		.pipe(jshint.reporter("fail"))
 		.pipe(uglify())
 		.pipe(insert.transform(function(contents, file) {
-			var str = ["\nworkerScriptUri = URL.createObjectURL(new Blob([\""];
+			var str = ["\nvar workerScriptUri = URL.createObjectURL(createBlob([\""];
 			str.push(contents.replace(/"/g, '\\"'));
 			str.push("\"]));");
 
@@ -37,10 +37,9 @@ gulp.task("default", function() {
 		.pipe(gulp.dest("build/dist"));
 });
 
-gulp.task("test", ["default"], function() {
-	return gulp.src("spec/*.js")
-		.pipe(jasmine({
-			includeStackTrace: true,
-			verbose: true
-		}));
+gulp.task("test", ["default"], function(done) {
+	new KarmaServer({
+	    configFile: __dirname + '/karma.conf.js',
+	    singleRun: true
+	  }, done).start();
 });

@@ -1,6 +1,10 @@
-/* globals postMessage: false, DataView: false, self: false */
+/* globals postMessage: false, DataView: false, self: false, onmessage: true */
 /* jshint -W097 */
 "use strict";
+
+onmessage = function(e) {
+	postMessage("test");
+};
 
 self.onmessage = function(msg) {
 	postLog("info", "Received message.");
@@ -159,5 +163,3 @@ TarFileStream.prototype = {
 		return file;
 	}
 };
-
-postMessage({ type: "ready" });

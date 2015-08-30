@@ -99,25 +99,6 @@ function untar(source, options) {
 
 		var worker = new Worker(workerScriptUri);
 
-		function initWorker() {
-			// Is source a string? Then assume it's a URL and download it.
-			if (typeof source === "string") {
-				loadArrayBuffer(source).then(
-					function(buffer) {
-						console.info("Loaded tar file, extracting.");
-						worker.postMessage({ type: "extract", buffer: buffer }, [buffer]);
-					},
-					function(err) {
-						onError(err);
-						reject(err);
-					}
-				);
-			} else {
-				console.info("Extracting tar file.");
-				worker.postMessage({ type: "extract", buffer: source }, [source]);
-			}
-		}
-
 		var files = [];
 		var msgData;
 
@@ -125,10 +106,6 @@ function untar(source, options) {
 			message = message.data;
 
 			switch (message.type) {
-				case "ready":
-					console.info("Worker is ready.");
-					initWorker();
-					break;
 				case "log":
 					console[message.data.level]("Worker: " + message.data.msg);
 					break;
@@ -156,6 +133,22 @@ function untar(source, options) {
 					break;
 			}
 		};
+
+		if (typeof source === "string") {
+			loadArrayBuffer(source).then(
+				function(buffer) {
+					console.info("Loaded tar file, sending to worker for extraction.");
+					worker.postMessage({ type: "extract", buffer: buffer }, [buffer]);
+				},
+				function(err) {
+					onError(err);
+					reject(err);
+				}
+			);
+		} else {
+			console.info("Sending tar file to worker for extraction.");
+			worker.postMessage({ type: "extract", buffer: source }, [source]);
+		}
 	});
 }
 

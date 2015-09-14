@@ -3,7 +3,7 @@ Library for extracting tar files in the browser.
 Useful when packing all your application images/sound/json/etc. data in a standard .tar file and serving to clients as one gzipped bundle.
 
 ## Browser feature requirements
-* [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). [See here for an IE polyfill](https://www.npmjs.com/package/promise).
+* [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). ([IE polyfill](https://www.npmjs.com/package/promise)).
 * [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
 * [Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API).
 * [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob) and the [Blob() constructor](https://developer.mozilla.org/en-US/docs/Web/API/Blob/Blob).

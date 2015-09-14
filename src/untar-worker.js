@@ -18,11 +18,13 @@ UntarWorker.prototype = {
 	},
 
  	postError: function(err) {
-		this.postMessage({ type: "error", data: err });
+ 		//console.info("postError(" + err.message + ")" + " " + JSON.stringify(err));
+		this.postMessage({ type: "error", data: { message: err.message } });
 	},
 
 	postLog: function(level, msg) {
-		this.postMessage({ type: "log", data: { level: level, msg: msg }});
+ 		console.info("postLog");
+ 		this.postMessage({ type: "log", data: { level: level, msg: msg }});
 	},
 
 	untarBuffer: function(arrayBuffer) {
@@ -41,6 +43,7 @@ UntarWorker.prototype = {
 	},
 
 	postMessage: function(msg, transfers) {
+ 		console.info("postMessage(" + msg + ", " + JSON.stringify(transfers) + ")");
 		self.postMessage(msg, transfers);
 	}
 };
@@ -170,6 +173,10 @@ UntarFileStream.prototype = {
 			// Directory - should we do anything with this? Nope!
 		} else {
 			// We only care about real files, not symlinks.
+		}
+
+		if (file.buffer === undefined) {
+			file.buffer = new ArrayBuffer(0);
 		}
 
 		// File data is padded to reach a 512 byte boundary; skip the padded bytes.

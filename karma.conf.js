@@ -15,8 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'https://www.promisejs.org/polyfills/promise-6.1.0.js',
-      {pattern: 'build/dev/**/*.js', included: false},
+      {pattern: 'build/**/**/*.js', included: false},
       {pattern: 'spec/**/*.*', included: false},
       'test-main.js'
     ],

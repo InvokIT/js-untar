@@ -4,29 +4,14 @@ var workerScriptUri; // Included at compile time
 
 var URL = window.URL || window.webkitURL;
 
-var createBlob = (function() {
-	if (typeof window.Blob === "function") {
-		return function(dataArray) { return new Blob(dataArray); };
-	} else {
-		var BBuilder = window.BlobBuilder || window.WebKitBlobBuilder;
-
-		return function(dataArray) {
-			var builder = new BBuilder();
-
-			for (var i = 0; i < dataArray.length; ++i) {
-				var v = dataArray[i];
-				builder.append(v);
-			}
-
-			return builder.getBlob();
-		};
-	}
-}());
-
 /**
 Returns a ProgressivePromise.
 */
 function untar(arrayBuffer) {
+	if (!(arrayBuffer instanceof ArrayBuffer)) {
+		throw new TypeError("arrayBuffer is not an instance of ArrayBuffer.");
+	}
+
 	if (!window.Worker) {
 		throw new Error("Worker implementation not available in this environment.");
 	}
@@ -35,6 +20,10 @@ function untar(arrayBuffer) {
 		var worker = new Worker(workerScriptUri);
 
 		var files = [];
+
+		worker.onerror = function(err) {
+			reject(err);
+		};
 
 		worker.onmessage = function(message) {
 			message = message.data;
@@ -52,7 +41,8 @@ function untar(arrayBuffer) {
 					resolve(files);
 					break;
 				case "error":
-					reject(message.data);
+					//console.log("error message");
+					reject(new Error(message.data.message));
 					break;
 				default:
 					reject(new Error("Unknown message from worker: " + message.type));
@@ -66,7 +56,7 @@ function untar(arrayBuffer) {
 }
 
 function decorateExtractedFile(file) {
-	file.blob = createBlob([file.buffer]);
+	file.blob = new Blob([file.buffer]);
 	delete file.buffer;
 
 	var blobUrl;

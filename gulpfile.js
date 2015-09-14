@@ -15,7 +15,7 @@ gulp.task("build:dev", function() {
 
 	return gulp.src(["src/untar.js"])
 		.pipe(sourcemaps.init())
-		.pipe(insert.append("\nworkerScriptUri = 'untar-worker.js';"))
+		.pipe(insert.append("\nworkerScriptUri = '/base/build/dev/untar-worker.js';"))
 		.pipe(addSrc(["src/ProgressivePromise.js", "src/untar-worker.js"]))
 		.pipe(jshint())
 		.pipe(jshint.reporter("default"))
@@ -50,7 +50,7 @@ gulp.task("build:dist", function() {
 		.pipe(insert.prepend('"use strict";\n'))
 		.pipe(uglify())
 		.pipe(insert.transform(function(contents, file) {
-			var str = ["\nworkerScriptUri = URL.createObjectURL(createBlob([\""];
+			var str = ["\nworkerScriptUri = URL.createObjectURL(new Blob([\""];
 			str.push(contents.replace(/"/g, '\\"'));
 			str.push("\"]));");
 
@@ -72,7 +72,7 @@ gulp.task("build:dist", function() {
 
 gulp.task("default", ["build:dev", "build:dist"]);
 
-gulp.task("test", ["build:dev"], function(done) {
+gulp.task("test", ["build:dev", "build:dist"], function(done) {
 	new KarmaServer({
 	    configFile: __dirname + '/karma.conf.js',
 	    singleRun: true

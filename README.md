@@ -1,13 +1,14 @@
 # js-untar
-Library for extracting tar files in the browser.
+Library for extracting tar files in the browser. 
+Useful when packing all your application images/sound/json/etc. data in a standard .tar file and serving to clients as one gzipped bundle.
 
 ## Browser feature requirements
 * [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).
 * [Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API).
 * [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob) and the [Blob() constructor](https://developer.mozilla.org/en-US/docs/Web/API/Blob/Blob).
 
-As of September 2015 this includes Chrome>=20, Firefox>=13, IE>=10, Opera>=12.10 and Safari>=8.
-[Web Worker transfarable objects](https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage) are used when available, increasing speed greatly. This is supported in Chrome>=21, Firefox>=18, Opera>=15 and Safari.
+As of September 2015 this includes Chrome>=20, Firefox>=13, IE>=10, Opera>=12.10 and Safari>=8. 
+[Web Worker transferable objects](https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage) are used when available, increasing speed greatly. This is supported in Chrome>=21, Firefox>=18, Opera>=15 and Safari.
 
 ## Documentation
 Load the module with RequireJS or similar. The module is a function that returns a modified Promise with a progress callback. 
@@ -18,10 +19,9 @@ The extraction is done in a [Web Worker](https://developer.mozilla.org/en-US/doc
 ### Example:
 
 	define(["untar"], function(untar) {
-		// Load the source ArrayBuffer from a XMLHttpRequest or any other way.
-		var sourceBuffer = ...;
+		// Load the source ArrayBuffer from a XMLHttpRequest (or any other way you may need).
+		var sourceBuffer = [...];
 		
-		// Listening to progress events
 		untar(sourceBuffer)
 			.progress(function(extractedFile) {
 				...
@@ -57,8 +57,8 @@ The returned file object(s) has the following properties. Most of these are expl
 * linkname
 * ustarFormat
 * blob A [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob) object with the contens of the file.
-* getObjectUrl()
-  A unique [ObjectUrl](https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL) to the data can be retrieved with this method for easy usage of extracted data in <img> tags etc.
+* getObjectUrl() 
+  A unique [ObjectUrl](https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL) to the data can be retrieved with this method for easy usage of extracted data in &lt;img&gt; tags etc.
   		document.getElementById("targetImageElement").src = file.getObjectUrl();
 
 If the .tar file was in the ustar format (which most are), the following properties are also defined:

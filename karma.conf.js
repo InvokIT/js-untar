@@ -16,9 +16,9 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'https://www.promisejs.org/polyfills/promise-6.1.0.js',
-      'test-main.js',
       {pattern: 'build/dev/**/*.js', included: false},
-      {pattern: 'spec/**/*.*', included: false}
+      {pattern: 'spec/**/*.*', included: false},
+      'test-main.js'
     ],
 
 
@@ -53,12 +53,12 @@ module.exports = function(config) {
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
+    autoWatch: true,
 
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
 
     browserNoActivityTimeout: 60000,
 

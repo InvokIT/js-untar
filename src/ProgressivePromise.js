@@ -37,13 +37,15 @@ function ProgressivePromise(fn) {
 		return promise;
 	};
 
+	var origThen = promise.then;
+
 	promise.then = function(onSuccess, onFail, onProgress) {
-		Promise.prototype.then.call(promise, onSuccess, onFail);
+		origThen.call(promise, onSuccess, onFail);
 
 		if (onProgress !== undefined) {
 			promise.progress(onProgress);
 		}
-		
+
 		return promise;
 	};
 

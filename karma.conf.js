@@ -15,6 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'https://www.promisejs.org/polyfills/promise-6.1.0.js',
       {pattern: 'build/**/**/*.js', included: false},
       {pattern: 'spec/**/*.*', included: false},
       'test-main.js'
@@ -57,7 +58,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['Chrome', 'Firefox', 'IE'],
 
     browserNoActivityTimeout: 60000,
 

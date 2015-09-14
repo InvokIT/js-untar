@@ -56,17 +56,20 @@ function untar(arrayBuffer) {
 }
 
 function decorateExtractedFile(file) {
-	file.blob = new Blob([file.buffer]);
-	delete file.buffer;
-
+	var blob;
 	var blobUrl;
-	file.getObjectUrl = function() {
-		if (!blobUrl) {
-			blobUrl = URL.createObjectURL(file.blob);
+	Object.defineProperties(file, {
+		blob: {
+			get: function() {
+				return blob || (blob = new Blob([this.buffer]));
+			}
+		},
+		getObjectUrl: {
+			value: function() {
+				return blobUrl || (blubUrl = URL.createObjectURL(blob));
+			}
 		}
-
-		return blobUrl;
-	};
+	});
 
 	return file;
 }

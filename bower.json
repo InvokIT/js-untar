@@ -1,0 +1,32 @@
+{
+  "name": "js-untar",
+  "homepage": "https://github.com/Qvazar/js-untar",
+  "authors": [
+    "Sebastian Joergensen <sebjorg@gmail.com>"
+  ],
+  "description": "untar files in the browser",
+  "main": [
+    "build/dist/untar.js"
+  ],
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "tar",
+    "untar"
+  ],
+  "license": "GPL-3.0",
+  "ignore": [
+    "build/dev",
+    "node_modules",
+    "bower_components",
+    "spec",
+    "src",
+    "gulp*.*",
+    "karma.*.*",
+    "package.json",
+    "test-*.*"
+  ]
+}

@@ -29,7 +29,7 @@ The extraction is done in a [Web Worker](https://developer.mozilla.org/en-US/doc
 			.then(function(extractedFiles) {
 				...
 			});
-
+		// or
 		untar(sourceBuffer).then(
 			function(extractedFiles) { // onSuccess
 				...

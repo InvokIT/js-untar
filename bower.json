@@ -15,7 +15,8 @@
   ],
   "keywords": [
     "tar",
-    "untar"
+    "untar",
+    "package"
   ],
   "license": "GPL-3.0",
   "ignore": [

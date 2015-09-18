@@ -61,9 +61,13 @@ The returned file object(s) has the following properties. Most of these are expl
 * ustarFormat
 * buffer An ArrayBuffer with the contents of the file.
 * blob A [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob) object with the contents of the file.
-* getObjectUrl() 
+* getBlobUrl() 
   A unique [ObjectUrl](https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL) to the data can be retrieved with this method for easy usage of extracted data in &lt;img&gt; tags etc.
-  		document.getElementById("targetImageElement").src = file.getObjectUrl();
+  			document.getElementById("targetImageElement").src = file.getObjectUrl();
+* readAsString()
+	Parse the file contents as a UTF-8 string.
+* readAsJSON()
+	Parse the file contents as a JSON object.
 
 If the .tar file was in the ustar format (which most are), the following properties are also defined:
 

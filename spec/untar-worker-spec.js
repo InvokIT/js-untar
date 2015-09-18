@@ -12,7 +12,8 @@ define(["untar-worker"], function() {
 			"directory/",
 			"directory/1.txt",
 			"directory/2.txt",
-			"directory/3.txt"
+			"directory/3.txt",
+			"object.json"
 		];
 
 		var fileContent = [
@@ -22,8 +23,10 @@ define(["untar-worker"], function() {
 			"",
 			"one",
 			"two",
-			"three"
+			"three",
+			'{"prop":"value"}'
 		];
+
 
 		function loadTestBuffer() {
 			return new Promise(function(resolve, reject) {
@@ -36,7 +39,7 @@ define(["untar-worker"], function() {
 					} else {
 						reject(r.status + " " + r.statusText);
 					}
-				}
+				};
 
 				r.open("GET", "base/spec/data/test.tar");
 				r.responseType = "arraybuffer";
@@ -98,7 +101,7 @@ define(["untar-worker"], function() {
 			});
 
 			it("should use hasNext() to indicate more files", function() {
-				for (var i = 0; i < 7; ++i) {
+				for (var i = 0; i < fileNames.length; ++i) {
 					expect(fileStream.hasNext()).toBe(true);
 					fileStream.next();
 				}

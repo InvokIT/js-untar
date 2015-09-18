@@ -55,21 +55,47 @@ function untar(arrayBuffer) {
 	});
 }
 
-function decorateExtractedFile(file) {
-	var blob;
-	var blobUrl;
-	Object.defineProperties(file, {
-		blob: {
-			get: function() {
-				return blob || (blob = new Blob([this.buffer]));
-			}
-		},
-		getObjectUrl: {
-			value: function() {
-				return blobUrl || (blubUrl = URL.createObjectURL(blob));
+var decoratedFileProps = {
+	blob: {
+		get: function() {
+			return this._blob || (this._blob = new Blob([this.buffer]));
+		}
+	},
+	getBlobUrl: {
+		value: function() {
+			return this._blobUrl || (this._blubUrl = URL.createObjectURL(blob));
+		}
+	},
+	readAsString: {
+		value: function() {
+			if (this._string) {
+				return this._string;
+			} else {
+				var buffer = this.buffer;
+				var charCount = buffer.byteLength;
+				var charSize = 1;
+				var byteCount = charCount * charSize;
+				var bufferView = new DataView(buffer);
+
+				var charCodes = [];
+
+				for (var i = 0; i < charCount; ++i) {
+					var charCode = bufferView.getUint8(i * charSize, true);
+					charCodes.push(charCode);
+				}
+
+				return (this._string = String.fromCharCode.apply(null, charCodes));
 			}
 		}
-	});
+	},
+	readAsJSON: {
+		value: function() {
+			return this._json || (this._json = JSON.parse(this.readAsString()));
+		}
+	}
+};
 
+function decorateExtractedFile(file) {
+	Object.defineProperties(file, decoratedFileProps);
 	return file;
 }

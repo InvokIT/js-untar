@@ -70,9 +70,16 @@ gulp.task("build:dist", function() {
 		.pipe(gulp.dest("build/dist"));
 });
 
+gulp.task("jshint:specs", function() {
+	return gulp.src("spec/**/*.js")
+		.pipe(jshint())
+		.pipe(jshint.reporter("default"))
+		.pipe(jshint.reporter("fail"));
+});
+
 gulp.task("default", ["build:dev", "build:dist"]);
 
-gulp.task("test", ["build:dev", "build:dist"], function(done) {
+gulp.task("test", ["jshint:specs", "build:dev", "build:dist"], function(done) {
 	new KarmaServer({
 	    configFile: __dirname + '/karma.conf.js',
 	    singleRun: true

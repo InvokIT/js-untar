@@ -63,7 +63,7 @@ var decoratedFileProps = {
 	},
 	getBlobUrl: {
 		value: function() {
-			return this._blobUrl || (this._blubUrl = URL.createObjectURL(blob));
+			return this._blobUrl || (this._blubUrl = URL.createObjectURL(this.blob));
 		}
 	},
 	readAsString: {

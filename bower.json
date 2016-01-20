@@ -1,8 +1,8 @@
 {
   "name": "js-untar",
-  "homepage": "https://github.com/Qvazar/js-untar",
+  "homepage": "https://github.com/InvokIT/js-untar",
   "authors": [
-    "Sebastian Joergensen <sebjorg@gmail.com>"
+    "Sebastian Joergensen <sj@invokit.dk>"
   ],
   "description": "untar files in the browser",
   "main": [
@@ -18,7 +18,7 @@
     "untar",
     "package"
   ],
-  "license": "GPL-3.0",
+  "license": "MIT",
   "ignore": [
     "build/dev",
     "node_modules",

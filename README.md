@@ -12,7 +12,10 @@ As of September 2015 this includes Chrome>=20, Firefox>=13, IE>=10, Opera>=12.10
 [Web Worker transferable objects](https://developer.mozilla.org/en-US/docs/Web/API/Worker/postMessage) are used when available, increasing speed greatly. This is supported in Chrome>=21, Firefox>=18, Opera>=15 and Safari.
 
 ## Installation
-	bower install --save js-untar
+### NPM
+	npm install js-untar
+### Bower
+	bower install js-untar
 
 ## Documentation
 Supports AMD, CommonJS or simply load with a script tag, which will provide a global untar function. 

@@ -1,6 +1,6 @@
 {
   "name": "untar",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "untar files in the browser",
   "main": "",
   "directories": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Qvazar/js-untar.git"
+    "url": "https://github.com/InvokIT/js-untar.git"
   },
   "keywords": [
     "js",
@@ -19,12 +19,12 @@
     "browser",
     "extract"
   ],
-  "author": "Sebastian Joergensen <sebjorg@gmail.com>",
+  "author": "Sebastian Joergensen, InvokIT <sj@invokit.dk>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Qvazar/js-untar/issues"
+    "url": "https://github.com/InvokIT/js-untar/issues"
   },
-  "homepage": "https://github.com/Qvazar/js-untar",
+  "homepage": "https://github.com/InvokIT/js-untar",
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-add-src": "^0.2.0",

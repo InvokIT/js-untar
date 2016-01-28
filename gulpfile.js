@@ -66,7 +66,7 @@ gulp.task("build:dist", function() {
 			exports: function() { return "untar"; },
 			namespace: function() { return "untar"; }
 		}))
-		//.pipe(uglify())
+		.pipe(uglify())
 		.pipe(gulp.dest("build/dist"));
 });
 

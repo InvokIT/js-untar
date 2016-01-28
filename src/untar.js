@@ -1,8 +1,10 @@
-/* globals window: false, Blob: false, Promise: false, console: false, Worker: false, ProgressivePromise: false */
+/* globals Blob: false, Promise: false, console: false, Worker: false, ProgressivePromise: false */
 
 var workerScriptUri; // Included at compile time
 
-var URL = window.URL || window.webkitURL;
+var global = window || this;
+
+var URL = global.URL || global.webkitURL;
 
 /**
 Returns a ProgressivePromise.
@@ -12,8 +14,8 @@ function untar(arrayBuffer) {
 		throw new TypeError("arrayBuffer is not an instance of ArrayBuffer.");
 	}
 
-	if (!window.Worker) {
-		throw new Error("Worker implementation not available in this environment.");
+	if (!global.Worker) {
+		throw new Error("Worker implementation is not available in this environment.");
 	}
 
 	return new ProgressivePromise(function(resolve, reject, progress) {

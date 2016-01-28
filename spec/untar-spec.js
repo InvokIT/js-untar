@@ -1,4 +1,4 @@
-define(["untar", "../build/dist/untar"], function(untarDev, untarDist) {
+define(["lodash", "untar", "../build/dist/untar"], function(_, untarDev, untarDist) {
 
 	function loadTestBuffer() {
 		return new Promise(function(resolve, reject) {
@@ -81,10 +81,10 @@ define(["untar", "../build/dist/untar"], function(untarDev, untarDist) {
 
 						loadTestBuffer().then(function(buffer) {
 							untar(buffer)
-								.progress(function(file) {
-									expect(file.readAsString()).toBe(fileContent[i++]);
-								})
-								.then(done);
+							.progress(function(file) {
+								expect(file.readAsString()).toBe(fileContent[i++]);
+							})
+							.then(done);
 						});
 					});
 				});
@@ -93,15 +93,39 @@ define(["untar", "../build/dist/untar"], function(untarDev, untarDist) {
 					it("should read file contents as a JSON object", function(done) {
 						loadTestBuffer().then(function(buffer) {
 							untar(buffer)
-								.progress(function(file) {
-									if (/\.json$/.test(file.name)) {
-										var o;
-										expect(function() { o = file.readAsJSON(); }).not.toThrow();
-										expect(o).toEqual({ prop: "value" });
-									}
-								})
-								.then(done);
+							.progress(function(file) {
+								if (/\.json$/.test(file.name)) {
+									var o;
+									expect(function() { o = file.readAsJSON(); }).not.toThrow();
+									expect(o).toEqual({ prop: "value" });
+								}
+							})
+							.then(done);
 						});
+					});
+				});
+
+				describe("getBlobUrl()", function() {
+					it("should return a unique ObjectURL for each file.", function(done) {
+						return loadTestBuffer().then(function(buffer) {
+							return untar(buffer)
+							.then(function(files) {
+								//console.debug("'getBlobUrl() should return a unique ObjectURL for each file' loaded and untar'ed the test buffer.");
+
+								var urls = _.map(files, function(file) { return file.getBlobUrl(); });
+
+								expect(_.some(urls, function(url) { return url === null; } )).toBe(false);
+
+								expect(_.uniq(urls).length).toBe(urls.length);
+
+								urlsCopy = _.map(files, function(file) { return file.getBlobUrl(); });
+								expect(urlsCopy).toEqual(urls);
+
+								//console.debug("'getBlobUrl() should return a unique ObjectURL for each file' ran all expectations");
+							});
+						})
+						.then(done)
+						.catch(done.fail);
 					});
 				});
 

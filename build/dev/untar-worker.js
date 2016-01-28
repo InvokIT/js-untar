@@ -24,7 +24,7 @@ UntarWorker.prototype = {
 	},
 
 	postLog: function(level, msg) {
- 		console.info("postLog");
+ 		//console.info("postLog");
  		this.postMessage({ type: "log", data: { level: level, msg: msg }});
 	},
 
@@ -44,7 +44,7 @@ UntarWorker.prototype = {
 	},
 
 	postMessage: function(msg, transfers) {
- 		console.info("postMessage(" + msg + ", " + JSON.stringify(transfers) + ")");
+ 		//console.info("postMessage(" + msg + ", " + JSON.stringify(transfers) + ")");
 		self.postMessage(msg, transfers);
 	}
 };

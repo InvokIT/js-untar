@@ -19,6 +19,10 @@ require.config({
   // dynamically load all test files
   deps: allTestFiles,
 
+  paths: {
+    "lodash": '//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.0.1/lodash.min'
+  },
+
   // we have to kickoff jasmine, as it is asynchronous
   callback: window.__karma__.start
 });

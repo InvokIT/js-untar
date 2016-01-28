@@ -50,7 +50,7 @@ gulp.task("build:dist", function() {
 		.pipe(insert.prepend('"use strict";\n'))
 		.pipe(uglify())
 		.pipe(insert.transform(function(contents, file) {
-			var str = ["\nworkerScriptUri = URL.createObjectURL(new Blob([\""];
+			var str = ["\nworkerScriptUri = (window||this).URL.createObjectURL(new Blob([\""];
 			str.push(contents.replace(/"/g, '\\"'));
 			str.push("\"]));");
 
@@ -66,7 +66,7 @@ gulp.task("build:dist", function() {
 			exports: function() { return "untar"; },
 			namespace: function() { return "untar"; }
 		}))
-		.pipe(uglify())
+		//.pipe(uglify())
 		.pipe(gulp.dest("build/dist"));
 });
 

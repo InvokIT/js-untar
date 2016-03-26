@@ -1,6 +1,6 @@
 {
   "name": "js-untar",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "untar files in the browser",
   "main": "build/dist/untar",
   "directories": {

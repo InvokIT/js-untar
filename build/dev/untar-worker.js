@@ -149,10 +149,10 @@ UntarFileStream.prototype = {
 		file.modificationTime = parseInt(stream.readString(12), 8);
 		file.checksum = stream.readString(8);
 		file.type = stream.readString(1);
-		file.linkname = stream.readString(1);
+		file.linkname = stream.readString(100);
 		file.ustarFormat = stream.readString(6);
 
-		if (file.ustarFormat === "ustar") {
+		if (file.ustarFormat.indexOf("ustar") > -1) {
 			file.version = stream.readString(2);
 			file.uname = stream.readString(32);
 			file.gname = stream.readString(32);

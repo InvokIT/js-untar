@@ -109,16 +109,35 @@ define(["untar-worker"], function() {
 				expect(fileStream.hasNext()).toBe(false);
 			});
 
-			it("should extract files in a specific order", function() {
+			it("should read files in the correct order with the correct file headers", function() {
 				var file;
 				var i = 0;
+				var isDir;
 
 				while (fileStream.hasNext()) {
 					file = fileStream.next();
+					isDir = file.name.endsWith("/");
+
 					expect(file.name).toBe(fileNames[i++]);
+					expect(file.mode).toBeDefined();
+					expect(file.uid).toBeDefined();
+					expect(file.gid).toBeDefined();
+					expect(file.size).toBeDefined();
+					expect(file.modificationTime).toBeTruthy();
+					expect(file.checksum).toBeTruthy();
+					expect(file.type).toBe(isDir ? "5" : "0");
+					expect(file.linkname).toBe("");
+					expect(file.ustarFormat).toBe("ustar");
+					expect(file.version).toBe("00");
+					expect(file.uname).toBeDefined();
+					expect(file.gname).toBeDefined();
+					expect(file.devmajor).toBeTruthy();
+					expect(file.devminor).toBeTruthy();
+					expect(file.namePrefix).toBeDefined();
 
 					if (i > fileNames.length) fail("i > fileNames.length");
 				}
+				
 			});
 
 			it("should extract the correct content", function() {

@@ -5,28 +5,33 @@ define(["untar-worker"], function() {
 	describe("untar-worker", function() {
 		var onmessage;
 
-		var fileNames = [
-			"1.txt",
-			"2.txt",
-			"3.txt",
-			"directory/",
-			"directory/1.txt",
-			"directory/2.txt",
-			"directory/3.txt",
-			"object.json"
-		];
+        var fileNames = [
+            "1.txt",
+            "2.txt",
+            "3.txt",
+            "511.txt",
+            "512.txt",
+            "513.txt",
+            "directory/",
+            "directory/1.txt",
+            "directory/2.txt",
+            "directory/3.txt",
+            "object.json"
+        ];
 
-		var fileContent = [
-			"one",
-			"two",
-			"three",
-			"",
-			"one",
-			"two",
-			"three",
-			'{"prop":"value"}'
-		];
-
+        var fileContent = [
+            function(ct) { return ct === "one"; },
+            function(ct) { return ct === "two"; },
+            function(ct) { return ct === "three"; },
+            function(ct) { return ct.length === 511; },
+            function(ct) { return ct.length === 512; },
+            function(ct) { return ct.length === 513; },
+            function(ct) { return ct === ""; },
+            function(ct) { return ct === "one"; },
+            function(ct) { return ct === "two"; },
+            function(ct) { return ct === "three"; },
+            function(ct) { return ct === '{"prop":"value"}'; }
+        ];
 
 		function loadTestBuffer() {
 			return new Promise(function(resolve, reject) {
@@ -131,8 +136,8 @@ define(["untar-worker"], function() {
 					expect(file.version).toBe("00");
 					expect(file.uname).toBeDefined();
 					expect(file.gname).toBeDefined();
-					expect(file.devmajor).toBeTruthy();
-					expect(file.devminor).toBeTruthy();
+					expect(file.devmajor).toBeDefined();
+					expect(file.devminor).toBeDefined();
 					expect(file.namePrefix).toBeDefined();
 
 					if (i > fileNames.length) fail("i > fileNames.length");
@@ -170,7 +175,7 @@ define(["untar-worker"], function() {
 					file = fileStream.next();
 
 					var content = readString(file.buffer);
-					expect(content).toBe(fileContent[i++]);
+					expect(fileContent[i++](content)).toBe(true);
 
 					if (i > fileContent.length) fail("i > fileContent.length");
 				}

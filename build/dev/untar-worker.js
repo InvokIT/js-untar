@@ -180,8 +180,13 @@ UntarFileStream.prototype = {
 			file.buffer = new ArrayBuffer(0);
 		}
 
-		// File data is padded to reach a 512 byte boundary; skip the padded bytes.
-		var dataEndPos = dataBeginPos + (file.size > 0 ? file.size + (512 - file.size % 512) : 0);
+		var dataEndPos = dataBeginPos + file.size;
+
+		// File data is padded to reach a 512 byte boundary; skip the padded bytes too.
+		if (file.size % 512 !== 0) {
+			dataEndPos += 512 - (file.size % 512);
+		}
+
 		stream.position(dataEndPos);
 
 		return file;

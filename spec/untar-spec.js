@@ -19,27 +19,33 @@ define(["lodash", "untar", "../build/dist/untar"], function(_, untarDev, untarDi
 		});
 	}
 
-	var fileNames = [
-		"1.txt",
-		"2.txt",
-		"3.txt",
-		"directory/",
-		"directory/1.txt",
-		"directory/2.txt",
-		"directory/3.txt",
-		"object.json"
-	];
+    var fileNames = [
+        "1.txt",
+        "2.txt",
+        "3.txt",
+        "511.txt",
+        "512.txt",
+        "513.txt",
+        "directory/",
+        "directory/1.txt",
+        "directory/2.txt",
+        "directory/3.txt",
+        "object.json"
+    ];
 
-	var fileContent = [
-		"one",
-		"two",
-		"three",
-		"",
-		"one",
-		"two",
-		"three",
-		'{"prop":"value"}'
-	];
+    var fileContent = [
+        function(ct) { return ct === "one"; },
+        function(ct) { return ct === "two"; },
+        function(ct) { return ct === "three"; },
+        function(ct) { return ct.length === 511; },
+        function(ct) { return ct.length === 512; },
+        function(ct) { return ct.length === 513; },
+        function(ct) { return ct === ""; },
+        function(ct) { return ct === "one"; },
+        function(ct) { return ct === "two"; },
+        function(ct) { return ct === "three"; },
+        function(ct) { return ct === '{"prop":"value"}'; }
+    ];
 
 	var tests = function(untar) {
 
@@ -52,6 +58,7 @@ define(["lodash", "untar", "../build/dist/untar"], function(_, untarDev, untarDi
 				loadTestBuffer().then(function(buffer) {
 					untar(buffer).then(
 						function(files) {
+                            //console.log(files.map(function(f) { return f.name; }));
 							expect(i).toBe(fileNames.length);
 							expect(files.length).toBe(fileNames.length);
 							done();
@@ -82,7 +89,7 @@ define(["lodash", "untar", "../build/dist/untar"], function(_, untarDev, untarDi
 						loadTestBuffer().then(function(buffer) {
 							untar(buffer)
 							.progress(function(file) {
-								expect(file.readAsString()).toBe(fileContent[i++]);
+								expect(fileContent[i++](file.readAsString())).toBe(true);
 							})
 							.then(done);
 						});

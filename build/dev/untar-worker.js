@@ -167,8 +167,9 @@ UntarFileStream.prototype = {
 
 		stream.position(dataBeginPos);
 
-		// Normal file is either "\0" or 0.
-		if (file.type === "0" || file.type === "\0") {
+		// Normal file is either "0" or "\0".
+		// In case of "\0", readString returns an empty string, that is "".
+		if (file.type === "0" || file.type === "") {
 			file.buffer = stream.readBuffer(file.size);
 		} else if (file.type == 5) {
 			// Directory - should we do anything with this? Nope!

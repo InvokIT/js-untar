@@ -8,14 +8,16 @@ var gulp = require("gulp"),
 	jshint = require("gulp-jshint"),
 	KarmaServer = require('karma').Server,
 	path = require("path"),
-	filter = require("gulp-filter");
+	filter = require("gulp-filter"),
+    webserver = require('gulp-webserver');
 
 gulp.task("build:dev", function() {
 	var f = filter(['*', '!untar-worker.js'], { restore: true });
 
 	return gulp.src(["src/untar.js"])
 		.pipe(sourcemaps.init())
-		.pipe(insert.append("\nworkerScriptUri = '/base/build/dev/untar-worker.js';"))
+		//.pipe(insert.append("\nworkerScriptUri = '/base/build/dev/untar-worker.js';"))
+		.pipe(insert.append("\nworkerScriptUri = '/build/dev/untar-worker.js';"))
 		.pipe(addSrc(["src/ProgressivePromise.js", "src/untar-worker.js"]))
 		.pipe(jshint())
 		.pipe(jshint.reporter("default"))
@@ -44,6 +46,7 @@ gulp.task("build:dev", function() {
 
 gulp.task("build:dist", function() {
 	return gulp.src("src/untar-worker.js")
+        .pipe(sourcemaps.init())
 		.pipe(jshint())
 		.pipe(jshint.reporter("default"))
 		.pipe(jshint.reporter("fail"))
@@ -67,6 +70,7 @@ gulp.task("build:dist", function() {
 			namespace: function() { return "untar"; }
 		}))
 		.pipe(uglify())
+        .pipe(sourcemaps.write("./"))
 		.pipe(gulp.dest("build/dist"));
 });
 
@@ -84,4 +88,13 @@ gulp.task("test", ["jshint:specs", "build:dev", "build:dist"], function(done) {
 	    configFile: __dirname + '/karma.conf.js',
 	    singleRun: true
 	  }, done).start();
+});
+
+gulp.task("example", ["build:dev"], function() {
+	gulp.src("./")
+		.pipe(webserver({
+			fallback: "./example/index.html",
+			livereload: true,
+			open: true
+		}));
 });

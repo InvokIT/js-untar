@@ -1,23 +1,31 @@
 define(["lodash", "untar", "../build/dist/untar"], function(_, untarDev, untarDist) {
 
-	function loadTestBuffer() {
-		return new Promise(function(resolve, reject) {
-			var r = new XMLHttpRequest();
+    function loadFile(path) {
+        return new Promise(function(resolve, reject) {
+            var r = new XMLHttpRequest();
 
-			r.onload = function(e) {
-				if (r.status >= 200 && r.status < 400) {
-					var buffer = r.response;
-					resolve(buffer);
-				} else {
-					reject(r.status + " " + r.statusText);
-				}
-			};
+            r.onload = function(e) {
+                if (r.status >= 200 && r.status < 400) {
+                    var buffer = r.response;
+                    resolve(buffer);
+                } else {
+                    reject(r.status + " " + r.statusText);
+                }
+            };
 
-			r.open("GET", "base/spec/data/test.tar");
-			r.responseType = "arraybuffer";
-			r.send();
-		});
-	}
+            r.open("GET", path);
+            r.responseType = "arraybuffer";
+            r.send();
+        });
+    }
+
+    function loadTestBuffer() {
+        return loadFile("base/spec/data/test.tar");
+    }
+
+    function loadPaxTestBuffer() {
+        return loadFile("base/spec/data/test-pax.tar");
+    }
 
     var fileNames = [
         "1.txt",
@@ -79,6 +87,16 @@ define(["lodash", "untar", "../build/dist/untar"], function(_, untarDev, untarDi
 				expect(untar).toThrow();
 				expect(function() { untar("test"); }).toThrow();
 			});
+
+			it("should support PAX headers", function(done) {
+				loadPaxTestBuffer().then(function(buffer) {
+					return untar(buffer).then(function(files) {
+						expect(files.length).toBe(1);
+						expect(files[0].name).toBe("é.txt");
+						done();
+					});
+				}, done.fail);
+			}, 20000);
 
 			describe("UntarFile", function() {
 

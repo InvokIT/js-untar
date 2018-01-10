@@ -61,7 +61,7 @@ The returned file object(s) has the following properties. Most of these are expl
 * uid
 * gid
 * size
-* modificationTime
+* mtime
 * checksum
 * type
 * linkname

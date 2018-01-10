@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type='text/javascript' src="../build/dev/ProgressivePromise.js"></script>
+    <script type='text/javascript' src="../build/dev/untar.js"></script>
+    <script type='text/javascript'>
+        'use strict';
+
+        function onTarError(title, err) { // onError
+            document.getElementById('results').textContent = '';
+            document.getElementById('errorMessage').textContent = title + ' : \n' + err;
+            document.getElementById('errorMessage').style.display = 'inherit';
+        }
+
+        function clickedUntar(e) {
+            // Reset GUI
+            document.getElementById('errorMessage').style.display = 'none';
+
+            // Get the uploaded File
+            const uploadedFile = document.getElementById('fileInput').files[0];
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                untar(reader.result).then(
+                    function (extractedFiles) { // onSuccess
+                        document.getElementById('results').textContent = JSON.stringify(extractedFiles, null, 2);
+                    },
+                    function (err) {
+                        onTarError('Untar Error', err);
+                    }
+                )
+            };
+            reader.onerror = function (event) {
+                console.log('FileReader Error', event);
+                onTarError('FileReader Error', event);
+            };
+
+            reader.readAsArrayBuffer(uploadedFile);
+        }
+    </script>
+</head>
+<body>
+<div>
+    Choose a file to untar:
+    <br>
+    <input type="file" id="fileInput">
+    <br><br>
+    <button onclick="clickedUntar()">Untar it!</button>
+    <br><br>
+    <p id="errorMessage" style="display: none">We could not untar it...</p>
+    <div id="results" style="font-family: monospace; white-space: pre;"></div>
+</div>
+</body>
+</html>

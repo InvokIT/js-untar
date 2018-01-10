@@ -33,23 +33,31 @@ define(["untar-worker"], function() {
             function(ct) { return ct === '{"prop":"value"}'; }
         ];
 
+        function loadFile(path) {
+            return new Promise(function(resolve, reject) {
+                var r = new XMLHttpRequest();
+
+                r.onload = function(e) {
+                    if (r.status >= 200 && r.status < 400) {
+                        var buffer = r.response;
+                        resolve(buffer);
+                    } else {
+                        reject(r.status + " " + r.statusText);
+                    }
+                };
+
+                r.open("GET", path);
+                r.responseType = "arraybuffer";
+                r.send();
+            });
+		}
+
 		function loadTestBuffer() {
-			return new Promise(function(resolve, reject) {
-				var r = new XMLHttpRequest();
+        	return loadFile("base/spec/data/test.tar");
+		}
 
-				r.onload = function(e) {
-					if (r.status >= 200 && r.status < 400) {
-						var buffer = r.response;
-						resolve(buffer);
-					} else {
-						reject(r.status + " " + r.statusText);
-					}
-				};
-
-				r.open("GET", "base/spec/data/test.tar");
-				r.responseType = "arraybuffer";
-				r.send();
-			});
+		function loadPaxTestBuffer() {
+            return loadFile("base/spec/data/test-pax.tar");
 		}
 
 		beforeEach(function() {

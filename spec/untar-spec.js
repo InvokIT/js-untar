@@ -89,14 +89,18 @@ define(["lodash", "untar", "../build/dist/untar"], function(_, untarDev, untarDi
 			});
 
 			it("should support PAX headers", function(done) {
-				loadPaxTestBuffer().then(function(buffer) {
-					return untar(buffer).then(function(files) {
-						expect(files.length).toBe(1);
-						expect(files[0].name).toBe("é.txt");
-						done();
-					});
-				}, done.fail);
-			}, 20000);
+				loadPaxTestBuffer().then(
+				    function(buffer) {
+                        return untar(buffer)
+                            .then(function(files) {
+                                expect(files.length).toBe(1);
+                                expect(files[0].name).toBe("é.txt");
+                            })
+                            .then(done, done.fail);
+				    },
+                    done.fail
+                );
+			}, 10000);
 
 			describe("UntarFile", function() {
 

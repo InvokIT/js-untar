@@ -16,8 +16,7 @@ gulp.task("build:dev", function() {
 
 	return gulp.src(["src/untar.js"])
 		.pipe(sourcemaps.init())
-		//.pipe(insert.append("\nworkerScriptUri = '/base/build/dev/untar-worker.js';"))
-		.pipe(insert.append("\nworkerScriptUri = '/build/dev/untar-worker.js';"))
+		.pipe(insert.append("\nworkerScriptUri = '/base/build/dev/untar-worker.js';"))
 		.pipe(addSrc(["src/ProgressivePromise.js", "src/untar-worker.js"]))
 		.pipe(jshint())
 		.pipe(jshint.reporter("default"))
@@ -53,9 +52,9 @@ gulp.task("build:dist", function() {
 		.pipe(insert.prepend('"use strict";\n'))
 		.pipe(uglify())
 		.pipe(insert.transform(function(contents, file) {
-			var str = ["\nworkerScriptUri = (window||this).URL.createObjectURL(new Blob([\""];
-			str.push(contents.replace(/"/g, '\\"'));
-			str.push("\"]));");
+			var str = ['\nworkerScriptUri = (window||this).URL.createObjectURL(new Blob(["'];
+			str.push(contents.replace(/\\/g, "\\\\").replace(/"/g, '\\"'));
+			str.push('"]));');
 
 			return str.join("");
 		}))
@@ -93,8 +92,12 @@ gulp.task("test", ["jshint:specs", "build:dev", "build:dist"], function(done) {
 gulp.task("example", ["build:dev"], function() {
 	gulp.src("./")
 		.pipe(webserver({
-			fallback: "./example/index.html",
+            directoryListing: false,
 			livereload: true,
-			open: true
+			open: "example/",
+            proxies: [
+                { source: "/base", target: "http://localhost:8000/"}
+            ],
+            port: 8000
 		}));
 });

@@ -108,7 +108,7 @@ function decorateExtractedFile(file) {
 	return file;
 }
 
-workerScriptUri = '/build/dev/untar-worker.js';
+workerScriptUri = '/base/build/dev/untar-worker.js';
 return untar;
 }));
 

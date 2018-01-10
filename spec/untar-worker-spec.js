@@ -136,7 +136,7 @@ define(["untar-worker"], function() {
 					expect(file.uid).toBeDefined();
 					expect(file.gid).toBeDefined();
 					expect(file.size).toBeDefined();
-					expect(file.modificationTime).toBeTruthy();
+					expect(file.mtime).toBeTruthy();
 					expect(file.checksum).toBeTruthy();
 					expect(file.type).toBe(isDir ? "5" : "0");
 					expect(file.linkname).toBe("");

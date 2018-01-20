@@ -85,3 +85,5 @@ If the .tar file was in the ustar format (which most are), the following propert
 * devmajor
 * devminor
 * namePrefix
+
+Additional vendor-specific PAX header fields might also be defined.

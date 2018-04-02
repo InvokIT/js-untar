@@ -27,6 +27,10 @@ define(["lodash", "untar", "../build/dist/untar"], function(_, untarDev, untarDi
         return loadFile("base/spec/data/test-pax.tar");
     }
 
+    function loadTestFile(filename) {
+        return loadFile("base/spec/data/" + filename);
+    }
+
     var fileNames = [
         "1.txt",
         "2.txt",
@@ -95,6 +99,36 @@ define(["lodash", "untar", "../build/dist/untar"], function(_, untarDev, untarDi
                             .then(function(files) {
                                 expect(files.length).toBe(1);
                                 expect(files[0].name).toBe("é.txt");
+                            })
+                            .then(done, done.fail);
+				    },
+                    done.fail
+                );
+			}, 10000);
+
+			it("should support USTAR format", function(done) {
+				loadTestFile("test-ustar.tar").then(
+				    function(buffer) {
+                        return untar(buffer)
+                            .then(function(files) {
+                                expect(files.length).toBe(1);
+                                expect(files[0].name).toBe("foo");
+                            })
+                            .then(done, done.fail);
+				    },
+                    done.fail
+                );
+			}, 10000);
+
+			it("should support USTAR format with long names", function(done) {
+				loadTestFile("test-ustar-with-prefix.tar").then(
+				    function(buffer) {
+                        return untar(buffer)
+                            .then(function(files) {
+                                expect(files.length).toBe(1);
+                                expect(files[0].name).toBe(
+                                    "directory-000/directory-001/directory-002/directory-003/directory-004/directory-005/directory-006/foo.txt"
+                                );
                             })
                             .then(done, done.fail);
 				    },

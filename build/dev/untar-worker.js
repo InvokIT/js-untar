@@ -282,7 +282,7 @@ UntarFileStream.prototype = {
 			file.namePrefix = stream.readString(155);
 
 			if (file.namePrefix.length > 0) {
-				file.name = file.namePrefix + file.name;
+                            file.name = file.namePrefix + "/" + file.name;
 			}
 		}
 

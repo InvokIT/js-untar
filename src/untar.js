@@ -40,13 +40,16 @@ function untar(arrayBuffer) {
 					progress(file);
 					break;
 				case "complete":
+					worker.terminate();
 					resolve(files);
 					break;
 				case "error":
 					//console.log("error message");
+					worker.terminate();
 					reject(new Error(message.data.message));
 					break;
 				default:
+					worker.terminate();
 					reject(new Error("Unknown message from worker: " + message.type));
 					break;
 			}

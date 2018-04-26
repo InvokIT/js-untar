@@ -45,7 +45,7 @@
     "karma-ie-launcher": "^0.2.0",
     "karma-jasmine": "^0.3.6",
     "karma-requirejs": "^0.2.2",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.10",
     "requirejs": "^2.1.20"
   }
 }

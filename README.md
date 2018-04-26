@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/InvokIT/js-untar.svg?branch=master)](https://travis-ci.org/InvokIT/js-untar)
+
 # js-untar
 Library for extracting tar files in the browser. 
 Useful when packing all your application images/sound/json/etc. data in a standard .tar file and serving to clients as one gzipped bundle.

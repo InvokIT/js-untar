@@ -18,8 +18,6 @@ As of September 2015 this includes Chrome>=20, Firefox>=13, IE>=10, Opera>=12.10
 ## Installation
 ### NPM
 	npm install js-untar
-### Bower
-	bower install js-untar
 
 ## Documentation
 Supports AMD, CommonJS or simply load with a script tag, which will provide a global untar function. 
@@ -30,6 +28,8 @@ The extraction is done in a [Web Worker](https://developer.mozilla.org/en-US/doc
 
 ### Example:
 
+	import untar from "js-untar";
+	
 	// Load the source ArrayBuffer from a XMLHttpRequest (or any other way you may need).
 	var sourceBuffer = [...];
 	

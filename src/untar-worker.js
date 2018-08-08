@@ -291,6 +291,7 @@ UntarFileStream.prototype = {
         // and https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.3.0/com.ibm.zos.v2r3.bpxa500/pxarchfm.htm
         switch (file.type) {
             case "0": // Normal file is either "0" or "\0".
+            case "L": // Indicates that the next file has a long name (over 100 chars), and therefore keeps the name of the file in this block's buffer. http://www.gnu.org/software/tar/manual/html_node/Standard.html
             case "": // In case of "\0", readString returns an empty string, that is "".
                 file.buffer = stream.readBuffer(file.size);
                 break;

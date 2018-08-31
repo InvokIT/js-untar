@@ -168,6 +168,22 @@ PaxHeader.prototype = {
     }
 };
 
+function LongFieldHeader(fieldName, fieldValue) {
+	this._fieldName = fieldName;
+	this._fieldValue = fieldValue;
+}
+
+LongFieldHeader.parse = function(fieldName, buffer) {
+    var bytes = new Uint8Array(buffer);
+	return new LongFieldHeader(fieldName, decodeUTF8(bytes));
+};
+
+LongFieldHeader.prototype = {
+	applyHeader: function(file) {
+		file[this._fieldName] = this._fieldValue;
+	}
+};
+
 function TarFile() {
 
 }
@@ -255,7 +271,7 @@ UntarFileStream.prototype = {
 		var stream = this._stream;
 		var file = new TarFile();
 		var isHeaderFile = false;
-		var paxHeader = null;
+		var header = null;
 
 		var headerBeginPos = stream.position();
 		var dataBeginPos = headerBeginPos + 512;
@@ -291,7 +307,6 @@ UntarFileStream.prototype = {
         // and https://www.ibm.com/support/knowledgecenter/en/SSLTBW_2.3.0/com.ibm.zos.v2r3.bpxa500/pxarchfm.htm
         switch (file.type) {
             case "0": // Normal file is either "0" or "\0".
-            case "L": // Indicates that the next file has a long name (over 100 chars), and therefore keeps the name of the file in this block's buffer. http://www.gnu.org/software/tar/manual/html_node/Standard.html
             case "": // In case of "\0", readString returns an empty string, that is "".
                 file.buffer = stream.readBuffer(file.size);
                 break;
@@ -313,11 +328,19 @@ UntarFileStream.prototype = {
                 break;
             case "g": // Global PAX header
                 isHeaderFile = true;
-                this._globalPaxHeader = PaxHeader.parse(stream.readBuffer(file.size));
-                break;
-            case "x": // PAX header
+                this._globalHeader = PaxHeader.parse(stream.readBuffer(file.size));
+				break;
+			case "K":
+				isHeaderFile = true;
+				header = LongFieldHeader.parse("linkname", stream.readBuffer(file.size));
+				break;
+			case "L": // Indicates that the next file has a long name (over 100 chars), and therefore keeps the name of the file in this block's buffer. http://www.gnu.org/software/tar/manual/html_node/Standard.html
+				isHeaderFile = true;
+				header = LongFieldHeader.parse("name", stream.readBuffer(file.size));
+				break;
+			case "x": // PAX header
                 isHeaderFile = true;
-                paxHeader = PaxHeader.parse(stream.readBuffer(file.size));
+                header = PaxHeader.parse(stream.readBuffer(file.size));
                 break;
             default: // Unknown file type
                 break;
@@ -344,8 +367,8 @@ UntarFileStream.prototype = {
 		    this._globalPaxHeader.applyHeader(file);
         }
 
-        if (paxHeader !== null) {
-		    paxHeader.applyHeader(file);
+        if (header !== null) {
+		    header.applyHeader(file);
         }
 
 		return file;

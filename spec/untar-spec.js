@@ -136,6 +136,22 @@ define(["lodash", "untar", "../build/dist/untar"], function(_, untarDev, untarDi
                 );
 			}, 10000);
 
+			it("should support file names over 100 characters", function(done) {
+				loadTestFile("lname.tar").then(
+				    function(buffer) {
+                        return untar(buffer)
+                            .then(function(files) {
+								expect(files.length).toBe(5);
+                                expect(files[0].name).toBe(
+									"lname/very_very_very_very_very_very_long_name/very_very_very_very_very_very_long_name/very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_very_name/long_doc.txt"
+								);
+                            })
+                            .then(done, done.fail);
+				    },
+                    done.fail
+                );
+			}, 10000);
+
 			describe("UntarFile", function() {
 
 				describe("readAsString()", function() {

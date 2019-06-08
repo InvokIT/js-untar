@@ -72,21 +72,27 @@ var decoratedFileProps = {
 		}
 	},
 	readAsString: {
-		value: function() {
-			var buffer = this.buffer;
-			var charCount = buffer.byteLength;
-			var charSize = 1;
-			var byteCount = charCount * charSize;
-			var bufferView = new DataView(buffer);
+		value: function(encoding) {
+			encoding = encoding || 'utf-8';
+			if (global.TextDecoder) {				
+				var decoder = new TextDecoder(encoding);
+				return decoder.decode(this.buffer);
+			} else {
+				var buffer = this.buffer;
+				var charCount = buffer.byteLength;
+				var charSize = 1;
+				var byteCount = charCount * charSize;
+				var bufferView = new DataView(buffer);
 
-			var charCodes = [];
+				var charCodes = [];
 
-			for (var i = 0; i < charCount; ++i) {
-				var charCode = bufferView.getUint8(i * charSize, true);
-				charCodes.push(charCode);
+				for (var i = 0; i < charCount; ++i) {
+					var charCode = bufferView.getUint8(i * charSize, true);
+					charCodes.push(charCode);
+				}
+
+				return (this._string = String.fromCharCode.apply(null, charCodes));
 			}
-
-			return (this._string = String.fromCharCode.apply(null, charCodes));
 		}
 	},
 	readAsJSON: {

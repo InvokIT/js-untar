@@ -24,6 +24,12 @@
                 untar(reader.result).then(
                     function (extractedFiles) { // onSuccess
                         document.getElementById('results').textContent = JSON.stringify(extractedFiles, null, 2);
+                        extractedFiles.forEach(x => {
+                            var t0 = performance.now();
+                            x.readAsString();
+                            var t1 = performance.now();
+                            console.log("x took " + (t1 - t0) + " milliseconds.")
+                        });
                     },
                     function (err) {
                         onTarError('Untar Error', err);

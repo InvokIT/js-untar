@@ -43,7 +43,7 @@
     "karma-chrome-launcher": "^0.2.0",
     "karma-jasmine": "^0.3.6",
     "karma-requirejs": "^0.2.2",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.20",
     "requirejs": "^2.1.20"
   }
 }

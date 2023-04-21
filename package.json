@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "untar files in the browser",
   "main": "build/dist/untar",
+  "types": "build/dev/untar.d.ts",
   "directories": {
     "test": "test"
   },
